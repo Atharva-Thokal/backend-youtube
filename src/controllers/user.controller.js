@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { mongoose } from "mongoose";
 import jwt from "jsonwebtoken"
 
 
@@ -266,6 +267,7 @@ const updateAccountDetails = asyncHandler(async(req, res) => {
         throw new ApiError(400, "All fields are required")
     }
 
+    //here find a solution to update  fullname and email when they are new and not same as previse
     const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
@@ -369,9 +371,7 @@ const getUserChannelProfile = asyncHandler(async(req, res) => {
                     $size: "$subscribers"
                 },
                 channelSubscribedToCount: {
-                    $addFields: {
-                        $size: "$subscribedTo"
-                    }
+                    $size: "$subscribedTo"                    
                 },
                 isSubscribed: {
                     $cond: {
